@@ -44,11 +44,12 @@ button {
     color: white;
     background-color: #007bff;
     border: none;
-    padding: 0.5em 1em;
+    padding: 1em 2em; /* increase the padding values */
     border-radius: 5px;
     cursor: pointer;
     margin-left: 5em;
     margin-right: 5em;
+    font-size: 1.2em; /* increase the font size */
 }
 
 button:hover {
