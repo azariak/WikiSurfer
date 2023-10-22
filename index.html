@@ -1,6 +1,10 @@
+<!-- Welcome to WikiSurfer! 
+
+This is still in active development. The plan is for a website that lets you surf
+through interesting Wikipedia articles. (Kind of like an educational alternative to TikTok).-->
+
 <!DOCTYPE html>
 <html>
-<!-- https://webformatter.com/html Local HTML Formatter -->
 
 <head>
 	<title>WikiSurfer</title>
@@ -13,6 +17,8 @@
 	</div>
 
 	<div id="main">
+		<!-- This is an iframe to show the relevant Wikipedia page. It uses the API to generate the right link for the article, 
+		as seen in function.js -->
 		<iframe id="wiki-article" src="" frameborder="0" width="100%" height="100%"></iframe>
 	</div>
 
@@ -20,7 +26,6 @@
 		<button id="previous-btn">Previous</button>
 		<button id="next-btn">Next</button>
 	</div>
-
 	<script src="function.js"></script>
 </body>
 </html>
