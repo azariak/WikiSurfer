@@ -1,3 +1,3 @@
 # WikiSurfer
 
-Note: This is a personal project in early stages of development.
+Note: This is a personal project being actively developed.
