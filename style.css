@@ -32,6 +32,7 @@ a {
     width: 100%;
     border: none;
     overflow: hidden;
+    
 }
 
 #footer {
@@ -67,3 +68,4 @@ button:hover {
 #next-btn {
     margin-left: auto;
 }
+
