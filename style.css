@@ -1,15 +1,19 @@
+:root {
+    --background: #646464;
+  }
+
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #333;
+    background-color: var(--background);
 }
 
 #header {
     height: calc(10vh + 0.5em); /* 10% of viewport height + 0.5em for padding */
-    background-color: #333;
+    background-color:  var(--background);
     color: white;
     text-align: center;
     padding-top: 0.5em;
@@ -37,7 +41,7 @@ a {
 
 #footer {
     height: calc(10vh + 0.5em); /* 10% of viewport height + 0.5em for padding */
-    background-color: #333;
+    background-color:  var(--background);
     color: white;
     display: flex;
     justify-content: space-between;
