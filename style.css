@@ -23,6 +23,10 @@ html, body {
     flex: 1;
 }
 
+a {
+    color: white;
+  }
+
 #iframe {
     height: calc(100% - 10vh - 0.5em - 50px);
     width: 100%;
