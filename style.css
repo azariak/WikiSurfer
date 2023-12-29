@@ -19,10 +19,6 @@ html, body {
     padding-top: 0.5em;
 }
 
-.sub-title {
-    font-size: 0.75em;
-}
-
 #main {
     flex: 1;
     padding-top: 10px;
