@@ -1,5 +1,6 @@
 :root {
-    --background: #646464;
+    background: linear-gradient(to bottom, #003300 0%, #336600 100%);
+
   }
 
 html, body {
