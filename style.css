@@ -19,9 +19,12 @@ html, body {
     padding-top: 0.5em;
 }
 
+
 #main {
     flex: 1;
     padding-top: 1%;
+    height: 100%;
+    width: 100%;
 }
 
 a {
@@ -69,4 +72,13 @@ button:hover {
 
 #next-btn {
     margin-left: auto;
+}
+
+#white-box {
+    margin-top: 2%;
+    margin-left: 16%;
+    margin-right: 16%;
+    flex: 1;
+    color: darkslategray;
+    border-radius: 5%;
 }

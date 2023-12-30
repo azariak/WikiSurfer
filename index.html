@@ -19,14 +19,11 @@ through interesting Wikipedia articles. (Kind of like an educational alternative
 
 	</div>
 
-	<div id="main">
-		<!-- This is an iframe to show the relevant Wikipedia page. 
-			The API can be used to generate the text, see function.js, however the current method looks cleaner.
-		The next version uses the API to 
-		render the article. -> api.php?action=featuredfeed&feed=potd-->
-		<iframe id="wiki-article" src="" frameborder="0" width="100%" height="100%" style="clip-path: inset(0 0% 0 0%);"></iframe>
-
-	</div>
+    <div id="white-box">
+        <div id="main">
+            <iframe id="wiki-article" src="" frameborder="0" width="100%" height="100%" style="clip-path: inset(0 0% 0 0%); border-radius: 5%;"></iframe>
+        </div>
+    </div>
 
 	<div id="footer">
 		<button id="previous-btn">Previous</button>
