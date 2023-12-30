@@ -22,9 +22,9 @@ html, body {
 
 #main {
     flex: 1;
-    padding-top: 1%;
     height: 100%;
     width: 100%;
+    margin-top: -8%;
 }
 
 a {
