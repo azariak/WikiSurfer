@@ -59,8 +59,7 @@ body {
     position: relative;
     background: transparent;
     width: 90%;
-    max-width: 1200px;
-    
+    max-width: 2300px;
 }
 
 @media (min-width: 768px) {
