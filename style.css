@@ -1,12 +1,33 @@
 :root {
     --header-height: 10vh;
     --footer-height: 10vh;
-    --main-height: 80vh;
+    --main-height: calc(100vh - var(--header-height) - var(--footer-height));
     --gradient-start: #1a472a;
     --gradient-end: #2d5a27;
     --primary-color: #007bff;
     --hover-color: #0056b3;
 }
+
+@media (max-width: 768px) {
+    #footer {
+      position: fixed; /* Keep it fixed on mobile */
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5rem;
+      height: var(--footer-height);
+      min-height: 80px;
+      background: var(--gradient-start);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Optionally adjust other elements to avoid content being hidden behind the fixed footer */
+    #white-box {
+      margin-bottom: calc(var(--footer-height) + 1rem);
+    }
+  }
 
 * {
     margin: 0;
@@ -25,6 +46,7 @@ body {
     flex-direction: column;
     background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    position: relative;
 }
 
 #header {
@@ -37,6 +59,11 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 #header h1 {
@@ -55,7 +82,7 @@ body {
 
 #white-box {
     height: var(--main-height);
-    margin: 1rem auto;
+    margin: var(--header-height) auto 0;
     position: relative;
     background: transparent;
     width: 90%;
@@ -85,7 +112,6 @@ body {
     border: none;
     border-radius: 20px;
     background: white;
-    
 }
 
 #footer {
@@ -97,6 +123,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    min-height: 50px;
 }
 
 button {
@@ -108,6 +140,7 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: clamp(0.8rem, 2vw, 1rem);
+    white-space: nowrap;
 }
 
 button:hover {
@@ -157,6 +190,7 @@ button:active {
     opacity: 0;
     transition: opacity 0.3s;
     font-size: clamp(0.8rem, 2vw, 1rem);
+    z-index: 1001;
 }
 
 .loading-indicator.active {
