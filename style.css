@@ -1,83 +1,167 @@
 :root {
-    background: linear-gradient(to bottom, #333300 0%, #006600 100%);    
-  }
+    --header-height: 10vh;
+    --footer-height: 10vh;
+    --main-height: 80vh;
+    --gradient-start: #1a472a;
+    --gradient-end: #2d5a27;
+    --primary-color: #007bff;
+    --hover-color: #0056b3;
+}
 
-html, body {
+* {
     margin: 0;
     padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--background);
+    box-sizing: border-box;
 }
 
-#header {
-    height: calc(10vh + 0.5em); /* 10% of viewport height + 0.5em for padding */
-    background-color:  var(--background);
-    color: white;
-    text-align: center;
-    padding-top: 0.5em;
-}
-
-
-#main {
-    flex: 1;
-    height: 100%;
-    width: 100%;
-    margin-top: -8%;
-}
-
-a {
-    color: white;
-    text-decoration: none;
-  }
-
-#iframe {
-    height: calc(100% - 10vh - 0.5em - 50px);
-    width: 100%;
-    border: none;
+html, body {
+    height: 100vh;
     overflow: hidden;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+#header {
+    height: var(--header-height);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#header h1 {
+    font-size: min(2.5rem, 8vw);
+    margin-bottom: 0.5rem;
+}
+
+#header h4 {
+    font-size: min(1rem, 4vw);
+}
+
+#header a {
+    color: white;
+    text-decoration: none;
+}
+
+#white-box {
+    height: var(--main-height);
+    margin: 0 clamp(1rem, 16%, 16rem);
+    position: relative;
+    background: transparent;
+}
+
+#main {
+    height: 100%;
+    width: 100%;
+}
+
+#wiki-article {
+    height: 100%;
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    background: white;
+}
+
+/* Custom scrollbar styles that will be inherited by the iframe */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 #footer {
-    height: calc(10vh + 0.5em); /* 10% of viewport height + 0.5em for padding */
-    background-color:  var(--background);
+    height: var(--footer-height);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 0.5em;
+    padding: 0 1rem;
 }
 
 button {
+    padding: clamp(0.5rem, 2vw, 0.8rem) clamp(1rem, 3vw, 2rem);
     color: white;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     border: none;
-    padding: 1em 2em; /* increase the padding values */
-    border-radius: 15px;
+    border-radius: 12px;
     cursor: pointer;
-    margin-left: 5em;
-    margin-right: 5em;
-    font-size: 1.2em; /* increase the font size */
+    transition: all 0.3s ease;
+    font-size: clamp(0.8rem, 2vw, 1rem);
 }
 
 button:hover {
-    background-color: #0069d9;
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 #previous-btn {
-    margin-right: auto;
+    margin-left: clamp(1rem, 5vw, 5rem);
 }
 
 #next-btn {
-    margin-left: auto;
+    margin-right: clamp(1rem, 5vw, 5rem);
 }
 
-#white-box {
-    margin-top: 2%;
-    margin-left: 16%;
-    margin-right: 16%;
-    flex: 1;
-    color: darkslategray;
-    border-radius: 5%;
+#footer h3 {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    display: flex;
+    gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+#footer a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+#footer a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.loading-indicator {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.loading-indicator.active {
+    opacity: 1;
 }
