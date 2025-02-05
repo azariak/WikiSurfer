@@ -12,6 +12,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
 }
 
 html, body {
@@ -54,9 +55,24 @@ body {
 
 #white-box {
     height: var(--main-height);
-    margin: 0 clamp(1rem, 16%, 16rem);
+    margin: 1rem auto;
     position: relative;
     background: transparent;
+    width: 90%;
+    max-width: 1200px;
+    
+}
+
+@media (min-width: 768px) {
+    #white-box {
+        width: 70%;
+    }
+}
+
+@media (min-width: 1200px) {
+    #white-box {
+        width: 68%;
+    }
 }
 
 #main {
@@ -70,25 +86,7 @@ body {
     border: none;
     border-radius: 20px;
     background: white;
-}
-
-/* Custom scrollbar styles that will be inherited by the iframe */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    
 }
 
 #footer {
@@ -123,11 +121,11 @@ button:active {
 }
 
 #previous-btn {
-    margin-left: clamp(1rem, 5vw, 5rem);
+    margin-left: clamp(0.5rem, 2vw, 5rem);
 }
 
 #next-btn {
-    margin-right: clamp(1rem, 5vw, 5rem);
+    margin-right: clamp(0.5rem, 2vw, 5rem);
 }
 
 #footer h3 {
