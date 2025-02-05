@@ -7,8 +7,15 @@
     --primary-color: #007bff;
     --hover-color: #0056b3;
     --min-footer-height: 60px;
-  }
-  
+}
+
+@media screen and (max-width: 480px) {
+    :root {
+        --footer-height: 25vh;
+        --main-height: calc(100vh - var(--header-height) - var(--footer-height));
+    }
+}
+
   * {
     margin: 0;
     padding: 0;
