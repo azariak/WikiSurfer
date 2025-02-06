@@ -7,7 +7,7 @@ Note: This is a personal project being actively developed.
 
 Dev Roadmap:
 - Organize articles by topic, allowing users to select preferences or use LLM/RL algorithms.
-- New user interface for Wikipedia articles to replace the current iframe, for improved reading.
+- New user interface with API for Wikipedia articles to replace the current iframe, for improved reading.
 - Theming options for a customizable user experience.
 - Fix mobile design for better accessibility and usability.
 - Update image on ReadME
