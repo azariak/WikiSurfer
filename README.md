@@ -12,3 +12,4 @@ Dev Roadmap:
 - Fix mobile design for better accessibility and usability.
 - Update image on ReadME
 - Make up/down highlighted after click
+- Add search for articles, AI chat
