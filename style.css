@@ -11,8 +11,14 @@
 
 @media screen and (max-width: 480px) {
     :root {
-        --footer-height: 25vh;
+        --footer-height: 18vh; /* smaller footer on mobile */
         --main-height: calc(100vh - var(--header-height) - var(--footer-height));
+    }
+
+    /* Larger footer buttons on mobile only */
+    #footer button {
+        font-size: clamp(1rem, 4.5vw, 1.2rem);
+        padding: clamp(0.7rem, 3.2vw, 0.9rem) clamp(1.2rem, 5vw, 2.2rem);
     }
 }
 
@@ -222,19 +228,21 @@ button:active {
 /* Use emoji for like/dislike */
 .scroll-arrow::before {
   content: '👍';
+  display: inline-block;
+  transform-origin: center;
 }
 
 .scroll-arrow.down::before {
   content: '👎';
 }
 
-/* subtle click animation */
+/* subtle click animation (on emoji only to avoid interfering with hover scale) */
 @keyframes pop {
   0% { transform: scale(1); }
   50% { transform: scale(0.92); }
   100% { transform: scale(1); }
 }
 
-.scroll-arrow:active {
+.scroll-arrow:active::before {
   animation: pop 160ms ease-out;
 }
