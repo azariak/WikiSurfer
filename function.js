@@ -94,6 +94,253 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowRight') navigateArticle('next');
 });
 
+// ------------------
+// Topics modal (UI only)
+// ------------------
+const TOPIC_STORAGE_KEY = 'ws_topics_v1';
+const DEFAULT_TOPICS_SIMPLE = [
+    'History','Science','Technology','Art','Music','Film','Literature','Philosophy','Religion','Sports','Geography','Food'
+];
+
+const topicsBtnEl = document.getElementById('topics-btn');
+const topicsModalEl = document.getElementById('topics-modal');
+const topicsCloseEl = document.getElementById('topics-close');
+const topicsSaveEl = document.getElementById('topics-save');
+const topicsResetEl = document.getElementById('topics-reset');
+const topicsGridEl = document.getElementById('topics-grid');
+
+function readTopics() {
+    try { return JSON.parse(localStorage.getItem(TOPIC_STORAGE_KEY)) ?? []; } catch { return []; }
+}
+function writeTopics(list) {
+    localStorage.setItem(TOPIC_STORAGE_KEY, JSON.stringify(Array.from(new Set(list))));
+}
+
+function renderTopicsSimple() {
+    if (!topicsGridEl) return;
+    const selected = new Set(readTopics());
+    topicsGridEl.innerHTML = '';
+    DEFAULT_TOPICS_SIMPLE.forEach(topic => {
+        const label = document.createElement('label');
+        label.className = 'topic-chip';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.value = topic;
+        input.checked = selected.has(topic);
+        const span = document.createElement('span');
+        span.textContent = topic;
+        label.appendChild(input);
+        label.appendChild(span);
+        topicsGridEl.appendChild(label);
+    });
+}
+
+function openTopicsModal() {
+    if (!topicsModalEl) return;
+    renderTopicsSimple();
+    topicsModalEl.removeAttribute('hidden');
+}
+function closeTopicsModal() {
+    if (!topicsModalEl) return;
+    topicsModalEl.setAttribute('hidden','');
+}
+
+if (topicsBtnEl) topicsBtnEl.addEventListener('click', openTopicsModal);
+if (topicsCloseEl) topicsCloseEl.addEventListener('click', closeTopicsModal);
+if (topicsModalEl) topicsModalEl.addEventListener('click', (e) => { if (e.target === topicsModalEl) closeTopicsModal(); });
+if (topicsResetEl) topicsResetEl.addEventListener('click', () => { writeTopics([]); renderTopicsSimple(); });
+if (topicsSaveEl) topicsSaveEl.addEventListener('click', () => {
+    if (!topicsGridEl) return closeTopicsModal();
+    const checked = topicsGridEl.querySelectorAll('input[type="checkbox"]:checked');
+    const topics = Array.from(checked).map(i => i.value);
+    writeTopics(topics);
+    closeTopicsModal();
+});
+
+/*
+// --------------
+// Topic-based ranking and preferences (client-only)
+// --------------
+
+const DEFAULT_TOPICS = [
+    'History','Science','Technology','Mathematics','Biology','Medicine','Physics','Chemistry','Engineering','Computer science',
+    'Geography','Earth','Space','Art','Architecture','Music','Film','Literature','Philosophy','Religion','Psychology',
+    'Economics','Business','Politics','Law','Military','Sports','Culture','Food','Language','Education'
+];
+
+const UI = {
+    topicsBtn: document.getElementById('topics-btn'),
+    modal: document.getElementById('topics-modal'),
+    modalClose: document.getElementById('topics-close'),
+    modalSave: document.getElementById('topics-save'),
+    modalReset: document.getElementById('topics-reset'),
+    topicsGrid: document.getElementById('topics-grid')
+};
+
+const STORAGE_KEYS = {
+    topics: 'ws_topics_v1',
+    likes: 'ws_likes_v1',
+    dislikes: 'ws_dislikes_v1',
+    queue: 'ws_queue_v1',
+    index: 'ws_index_v1'
+};
+
+function readJson(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+}
+
+function writeJson(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getSelectedTopics() {
+    return readJson(STORAGE_KEYS.topics, []);
+}
+
+function setSelectedTopics(topics) {
+    writeJson(STORAGE_KEYS.topics, Array.from(new Set(topics)));
+}
+
+function getLikes() { return readJson(STORAGE_KEYS.likes, []); }
+function getDislikes() { return readJson(STORAGE_KEYS.dislikes, []); }
+function addLike(title) {
+    const likes = getLikes();
+    if (!likes.includes(title)) { likes.push(title); writeJson(STORAGE_KEYS.likes, likes); }
+}
+function addDislike(title) {
+    const dislikes = getDislikes();
+    if (!dislikes.includes(title)) { dislikes.push(title); writeJson(STORAGE_KEYS.dislikes, dislikes); }
+}
+
+function renderTopics() {
+    if (!UI.topicsGrid) return;
+    const selected = new Set(getSelectedTopics());
+    UI.topicsGrid.innerHTML = '';
+    DEFAULT_TOPICS.forEach(topic => {
+        const id = `topic-${topic.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}`;
+        const wrapper = document.createElement('label');
+        wrapper.className = 'topic-chip';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.value = topic;
+        input.checked = selected.has(topic);
+        input.setAttribute('aria-label', topic);
+        const text = document.createElement('span');
+        text.textContent = topic;
+        wrapper.appendChild(input);
+        wrapper.appendChild(text);
+        UI.topicsGrid.appendChild(wrapper);
+    });
+}
+
+function openModal() {
+    renderTopics();
+    UI.modal.removeAttribute('hidden');
+}
+function closeModal() { UI.modal.setAttribute('hidden',''); }
+
+function readTopicsFromUI() {
+    const checked = UI.topicsGrid.querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checked).map(i => i.value);
+}
+
+// Build a ranked queue from existing articleTitles using simple topic keyword overlap
+function buildRankedQueue() {
+    const topics = getSelectedTopics();
+    const likes = new Set(getLikes());
+    const dislikes = new Set(getDislikes());
+    const topicWords = new Set(topics.map(t => t.toLowerCase()));
+
+    function topicScoreFromTitle(title) {
+        const parts = title.replace(/_/g,' ').toLowerCase().split(/[^a-z0-9]+/);
+        let overlap = 0;
+        for (const w of parts) if (topicWords.has(w)) overlap += 1;
+        return overlap;
+    }
+
+    // Base list from provided featured titles
+    const candidates = articleTitles.map(t => ({ title: t }));
+
+    // Score
+    const ranked = candidates.map(c => {
+        const base = 0.1 + Math.random() * 0.1; // small randomness for exploration
+        const likedBoost = likes.has(c.title) ? 2.0 : 0;
+        const dislikedPenalty = dislikes.has(c.title) ? -2.0 : 0;
+        const topicScore = topics.length ? topicScoreFromTitle(c.title) : 0;
+        const score = base + likedBoost + dislikedPenalty + topicScore;
+        return { ...c, score };
+    })
+    .filter(c => !dislikes.has(c.title))
+    .sort((a,b) => b.score - a.score)
+    .map(c => c.title);
+
+    return ranked.length ? ranked : shuffle(articleTitles.slice());
+}
+
+function saveQueue(queue) { writeJson(STORAGE_KEYS.queue, queue); }
+function loadQueue() { return readJson(STORAGE_KEYS.queue, null); }
+function saveIndex(idx) { localStorage.setItem(STORAGE_KEYS.index, String(idx)); }
+function loadIndex() { const v = localStorage.getItem(STORAGE_KEYS.index); return v ? parseInt(v,10) : null; }
+
+function ensureQueue() {
+    let q = loadQueue();
+    if (!q || !Array.isArray(q) || q.length === 0) {
+        q = buildRankedQueue();
+        saveQueue(q);
+    }
+    return q;
+}
+
+function getQueueLength() { return ensureQueue().length; }
+function getCurrentTitle() {
+    const q = ensureQueue();
+    if (currentArticleIndex < 0 || currentArticleIndex >= q.length) currentArticleIndex = 0;
+    return q[currentArticleIndex];
+}
+
+function rebuildQueueAndReset(keepIndexTitle) {
+    const q = buildRankedQueue();
+    saveQueue(q);
+    if (keepIndexTitle) {
+        const idx = q.indexOf(keepIndexTitle);
+        currentArticleIndex = idx >= 0 ? idx : 0;
+    } else {
+        currentArticleIndex = 0;
+    }
+    saveIndex(currentArticleIndex);
+}
+
+// Like/Dislike using existing arrow UI
+const likeBtn = document.querySelector('.scroll-arrow.up');
+const dislikeBtn = document.querySelector('.scroll-arrow.down');
+if (likeBtn) likeBtn.addEventListener('click', () => {
+    const title = getCurrentTitle();
+    addLike(title);
+    rebuildQueueAndReset(title);
+    loadArticle();
+});
+if (dislikeBtn) dislikeBtn.addEventListener('click', () => {
+    const title = getCurrentTitle();
+    addDislike(title);
+    rebuildQueueAndReset();
+    loadArticle();
+});
+
+// Topics modal wiring
+if (UI.topicsBtn) UI.topicsBtn.addEventListener('click', openModal);
+if (UI.modalClose) UI.modalClose.addEventListener('click', closeModal);
+if (UI.modal) UI.modal.addEventListener('click', (e) => { if (e.target === UI.modal) closeModal(); });
+if (UI.modalReset) UI.modalReset.addEventListener('click', () => { setSelectedTopics([]); renderTopics(); });
+if (UI.modalSave) UI.modalSave.addEventListener('click', () => {
+    const topics = readTopicsFromUI();
+    setSelectedTopics(topics);
+    closeModal();
+});
+
+// Initialize queue and index, then load
+let persistedIndex = null;
+*/
+
 // Initialize with shuffled array and random starting point
 shuffle(articleTitles);
 loadArticle();

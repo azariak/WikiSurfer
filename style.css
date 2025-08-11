@@ -82,6 +82,13 @@
     color: white;
     text-decoration: none;
   }
+
+#header #topics-btn {
+  position: absolute;
+  right: clamp(0.75rem, 2vw, 1rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
   
   #white-box {
     position: fixed;
@@ -138,6 +145,78 @@ button {
   touch-action: manipulation;
 }
 
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.4);
+  z-index: 1100;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-content {
+  width: min(720px, 92vw);
+  background: #ffffff;
+  color: #111827;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.modal-header, .modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: #f9fafb;
+}
+
+.modal-body {
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #374151;
+}
+
+.topics-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  user-select: none;
+}
+
+.topic-chip input {
+  accent-color: var(--primary-color);
+}
+
+button.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
 button:hover {
   background-color: var(--hover-color);
   transform: translateY(-2px);
@@ -149,10 +228,14 @@ button:active {
 
 #previous-btn {
   margin-left: clamp(0.5rem, 2vw, 5rem);
+  padding: clamp(0.6rem, 2.2vw, 0.95rem) clamp(1.2rem, 3.2vw, 2.2rem);
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
 }
 
 #next-btn {
   margin-right: clamp(0.5rem, 2vw, 5rem);
+  padding: clamp(0.6rem, 2.2vw, 0.95rem) clamp(1.2rem, 3.2vw, 2.2rem);
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
 }
 
 #footer h3 {
@@ -176,7 +259,7 @@ button:active {
 .loading-indicator {
   position: fixed;
   top: 1rem;
-  right: 1rem;
+  left: 1rem;
   background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 0.5rem 1rem;
