@@ -11,5 +11,4 @@ Dev Roadmap:
 - Theming options for a customizable user experience.
 - Fix mobile design for better accessibility and usability.
 - Update image on ReadME
-- Make up/down highlighted after click
 - Add search for articles, AI chat

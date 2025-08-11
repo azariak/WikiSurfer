@@ -210,6 +210,8 @@ button:active {
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 18px; /* emoji size */
+  line-height: 1;
 }
 
 .scroll-arrow:hover {
@@ -217,19 +219,22 @@ button:active {
   transform: scale(1.1);
 }
 
+/* Use emoji for like/dislike */
 .scroll-arrow::before {
-  content: '';
-  width: 12px;
-  height: 12px;
-  border-right: 2px solid white;
-  border-bottom: 2px solid white;
-  transform: rotate(45deg);
-}
-
-.scroll-arrow.up::before {
-  transform: rotate(-135deg);
+  content: '👍';
 }
 
 .scroll-arrow.down::before {
-  transform: rotate(45deg);
+  content: '👎';
+}
+
+/* subtle click animation */
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.scroll-arrow:active {
+  animation: pop 160ms ease-out;
 }
