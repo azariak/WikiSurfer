@@ -217,6 +217,53 @@
   gap: 0.5rem;
 }
 
+  /* Settings dropdown wrapper */
+  .settings { position: relative; }
+  .settings-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 18px;
+  }
+  .settings-button:hover { background: rgba(255, 255, 255, 0.2); }
+
+  .settings-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    background: #ffffff;
+    color: #111827;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 0.5rem;
+    width: 240px;
+    z-index: 1200;
+  }
+  .settings-menu[hidden] { display: none; }
+
+  .settings-section { padding: 0.35rem 0.25rem; }
+  .settings-section + .settings-section { border-top: 1px solid #e5e7eb; margin-top: 0.35rem; padding-top: 0.6rem; }
+  .settings-label { font-size: 0.8rem; color: #6b7280; margin-bottom: 0.35rem; }
+
+  /* Normalize controls inside white settings menu */
+  .settings-menu .theme-button,
+  .settings-menu .mode-toggle,
+  .settings-menu #topics-btn {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #111827;
+  }
+  .settings-menu .theme-button:hover,
+  .settings-menu .mode-toggle:hover,
+  .settings-menu #topics-btn:hover { background: #e5e7eb; }
+
 /* Make Topics button match theme button */
 #topics-btn {
   background: rgba(255, 255, 255, 0.1);
@@ -227,15 +274,27 @@
 }
 #topics-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
+/* Dark/Light toggle */
+.mode-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.45rem 0.6rem;
+  border-radius: 999px;
+}
+.mode-toggle:hover { background: rgba(255, 255, 255, 0.2); }
+
 /* White theme: improve contrast for top-right buttons */
 .theme-white .theme-button,
-.theme-white #topics-btn {
+.theme-white #topics-btn,
+.theme-white .settings-button {
   color: #0f172a;
   background: rgba(0, 0, 0, 0.06);
   border-color: rgba(0, 0, 0, 0.12);
 }
 .theme-white .theme-button:hover,
-.theme-white #topics-btn:hover { background: rgba(0, 0, 0, 0.12); }
+.theme-white #topics-btn:hover,
+.theme-white .settings-button:hover { background: rgba(0, 0, 0, 0.12); }
 .theme-white .theme-swatch { border-color: rgba(0, 0, 0, 0.3); }
   
   #white-box {
@@ -254,14 +313,260 @@
     width: 100%;
   }
   
-  #wiki-article {
+  /* New API-powered reader */
+  .article-view {
     height: 100%;
     width: 100%;
-    border: none;
     border-radius: 20px;
     background: white;
-    /* Make iframe scrollbar thin (Firefox) */
+    overflow: hidden;
     scrollbar-width: thin;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    display: grid;
+    grid-template-columns: minmax(260px, 30%) 1fr;
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+    align-items: start;
+    position: relative;
+  }
+  /* Iframe overlays the same area as the API reader container */
+  .wiki-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 20px;
+    background: #ffffff;
+  }
+
+  /* Stack on small screens */
+  @media (max-width: 900px) {
+    .article-view { 
+      grid-template-columns: 1fr;
+      overflow: auto;
+    }
+    
+    /* Hide the left summary column on mobile */
+    .article-summary {
+      display: none !important;
+      visibility: hidden;
+      width: 0;
+      overflow: hidden;
+    }
+    
+    /* Reset article content for mobile */
+    .article-content {
+      grid-column: 1;
+      overflow: visible;
+      height: auto;
+      padding-top: clamp(0.75rem, 2vw, 1.25rem);
+    }
+    
+    /* Mobile-specific content ordering */
+    .mobile-first-para {
+      margin-bottom: 1rem;
+    }
+    
+    .mobile-summary-insert {
+      margin: 0;
+    }
+    
+    .mobile-rest-content {
+      margin-top: 1rem;
+    }
+    
+    /* Mobile summary block that will be moved here */
+    .mobile-summary-block {
+      background: rgba(0,0,0,0.02);
+      padding: 1rem;
+      border-radius: 12px;
+      margin: 1rem 0;
+    }
+    
+    .mobile-summary-block .article-hero {
+      margin-bottom: 1rem;
+    }
+    
+    .mobile-summary-block .article-header {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    /* Dark mode mobile summary */
+    .article-view.dark .mobile-summary-block {
+      background: rgba(255,255,255,0.04);
+    }
+    
+    .article-view.dark .mobile-summary-block .article-header {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+  }
+
+  /* Light/Dark content modes */
+  .article-view.light { background: #ffffff; color: #0f172a; }
+  .article-view.light .article-header h2 { color: #0f172a; }
+  .article-view.light .article-header p { color: #475569; }
+  .article-view.light .article-content a { color: #2563eb; }
+  .article-view.light .article-hero figcaption { color: #64748b; }
+
+  .article-view.dark { background: #0b1220; color: #e5e7eb; }
+  .article-view.dark .article-header h2 { color: #e5e7eb; }
+  .article-view.dark .article-header p { color: #cad2e1; }
+  .article-view.dark .article-content { color: #ffffff; }
+  .article-view.dark .article-content p,
+  .article-view.dark .article-content li,
+  .article-view.dark .article-content h2,
+  .article-view.dark .article-content h3,
+  .article-view.dark .article-content h4 { color: #ffffff; }
+  .article-view.dark .article-content a { color: #8ab4ff; }
+  .article-view.dark .article-hero figcaption { color: #aab3c2; }
+  .article-view.dark .article-hero figcaption { color: #8a8f98; }
+  
+  /* Dark mode infobox */
+  .article-view.dark .article-infobox table {
+    background: rgba(255,255,255,0.04);
+  }
+  .article-view.dark .article-infobox th,
+  .article-view.dark .article-infobox td {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .article-view.dark .article-infobox th {
+    background: rgba(255,255,255,0.06);
+  }
+  .article-view.dark .article-infobox a {
+    color: #8ab4ff;
+  }
+
+  .article-summary {
+    position: relative;
+    align-self: start;
+    padding: clamp(0.5rem, 1.5vw, 1rem) clamp(0.75rem, 2vw, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    grid-column: 1;
+    grid-row: 1;
+    background: inherit;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .article-header { padding: 0.35rem 0 0 0; border-top: none; }
+  .article-header h2 {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1.25;
+    color: #0f172a;
+    margin-bottom: 0.2rem;
+  }
+  .article-header p {
+    color: #475569;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  }
+
+  /* Wikipedia infobox styling */
+  .article-infobox {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .article-infobox table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0,0,0,0.02);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .article-infobox th,
+  .article-infobox td {
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .article-infobox th {
+    background: rgba(0,0,0,0.04);
+    font-weight: 600;
+  }
+  .article-infobox img {
+    max-width: 100%;
+    height: auto;
+  }
+  .article-infobox a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .article-infobox a:hover {
+    text-decoration: underline;
+  }
+
+  .article-hero { margin: 0; padding: 0; }
+  .article-hero img {
+    width: 100%;
+    max-height: 18vh;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  .article-hero figcaption {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.4rem;
+  }
+
+  .article-content {
+    padding: clamp(0.5rem, 1.6vw, 0.9rem) clamp(0.75rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.6rem);
+    color: #0f172a;
+    align-self: start;
+    grid-column: 2;
+    grid-row: 1;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .wiki-iframe {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 20px;
+    background: #ffffff;
+  }
+
+  /* On desktop, start text at the very top */
+  @media (min-width: 900px) {
+    .article-content { padding-top: 0; }
+    .article-content .mw-parser-output > :first-child { margin-top: 0 !important; }
+  }
+  .article-content p {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+  }
+  .article-content h2,
+  .article-content h3,
+  .article-content h4 {
+    margin-top: 1.6rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+  .article-content h2 { font-size: clamp(1.2rem, 2.2vw, 1.6rem); }
+  .article-content h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
+  .article-content h4 { font-size: clamp(1rem, 1.8vw, 1.15rem); }
+
+  .article-content a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .article-content a:hover { text-decoration: underline; }
+
+  .article-content ul, .article-content ol {
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .article-content blockquote {
+    border-left: 3px solid #e5e7eb;
+    margin: 1rem 0;
+    padding-left: 1rem;
+    color: #334155;
   }
   
   #footer {

@@ -18,54 +18,91 @@ I am to make it customizable and plan on moving over to React at some point.
         <h1><a href="index.html">WikiSurfer🏄</a></h1>
         <h4>Azaria Kelman</h4>
         <div class="header-controls">
-            <div class="theme-select" id="theme-select" aria-haspopup="listbox" aria-expanded="false">
-                <button class="theme-button" id="theme-button" aria-label="Change theme" aria-haspopup="listbox" aria-expanded="false">
-                    <span class="theme-swatch" aria-hidden="true"></span>
-                    <span class="theme-label" id="theme-label">Theme</span>
+            <div class="settings" id="settings">
+                <button class="settings-button" id="settings-button" aria-label="Open settings" aria-haspopup="menu" aria-expanded="false">
+                    <span class="settings-icon" aria-hidden="true">⚙️</span>
                     <span class="chevron" aria-hidden="true">▾</span>
                 </button>
-                <ul class="theme-menu" id="theme-menu" role="listbox" tabindex="-1" aria-labelledby="theme-button" hidden>
-                    <li class="theme-option" role="option" data-value="forest" aria-selected="false">
-                        <span class="swatch" data-theme="forest"></span>
-                        <span>Forest</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="ocean" aria-selected="false">
-                        <span class="swatch" data-theme="ocean"></span>
-                        <span>Ocean</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="sunset" aria-selected="false">
-                        <span class="swatch" data-theme="sunset"></span>
-                        <span>Sunset</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="midnight" aria-selected="false">
-                        <span class="swatch" data-theme="midnight"></span>
-                        <span>Midnight</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="black" aria-selected="false">
-                        <span class="swatch" data-theme="black"></span>
-                        <span>Black</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="white" aria-selected="false">
-                        <span class="swatch" data-theme="white"></span>
-                        <span>White</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="mono" aria-selected="false">
-                        <span class="swatch" data-theme="mono"></span>
-                        <span>Black &amp; White</span>
-                    </li>
-                    <li class="theme-option" role="option" data-value="rose" aria-selected="false">
-                        <span class="swatch" data-theme="rose"></span>
-                        <span>Rose</span>
-                    </li>
-                </ul>
+                <div class="settings-menu" id="settings-menu" role="menu" hidden>
+                    <div class="settings-section">
+                        <div class="settings-label">Site Theme</div>
+                        <div class="theme-select" id="theme-select" aria-haspopup="listbox" aria-expanded="false">
+                            <button class="theme-button" id="theme-button" aria-label="Change theme" aria-haspopup="listbox" aria-expanded="false">
+                                <span class="theme-swatch" aria-hidden="true"></span>
+                                <span class="theme-label" id="theme-label">Theme</span>
+                                <span class="chevron" aria-hidden="true">▾</span>
+                            </button>
+                            <ul class="theme-menu" id="theme-menu" role="listbox" tabindex="-1" aria-labelledby="theme-button" hidden>
+                                <li class="theme-option" role="option" data-value="forest" aria-selected="false">
+                                    <span class="swatch" data-theme="forest"></span>
+                                    <span>Forest</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="ocean" aria-selected="false">
+                                    <span class="swatch" data-theme="ocean"></span>
+                                    <span>Ocean</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="sunset" aria-selected="false">
+                                    <span class="swatch" data-theme="sunset"></span>
+                                    <span>Sunset</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="midnight" aria-selected="false">
+                                    <span class="swatch" data-theme="midnight"></span>
+                                    <span>Midnight</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="black" aria-selected="false">
+                                    <span class="swatch" data-theme="black"></span>
+                                    <span>Black</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="white" aria-selected="false">
+                                    <span class="swatch" data-theme="white"></span>
+                                    <span>White</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="mono" aria-selected="false">
+                                    <span class="swatch" data-theme="mono"></span>
+                                    <span>Black &amp; White</span>
+                                </li>
+                                <li class="theme-option" role="option" data-value="rose" aria-selected="false">
+                                    <span class="swatch" data-theme="rose"></span>
+                                    <span>Rose</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <div class="settings-label">Wikipedia Theme</div>
+                        <button id="mode-toggle" class="mode-toggle" aria-pressed="false" aria-label="Toggle dark mode" title="Toggle dark mode">🌓</button>
+                    </div>
+                    <div class="settings-section">
+                        <div class="settings-label">Renderer</div>
+                        <label class="toggle">
+                            <input type="checkbox" id="renderer-iframe" />
+                            <span>Use API renderer (experimental)</span>
+                        </label>
+                    </div>
+                    <div class="settings-section">
+                        <button id="topics-btn" aria-haspopup="dialog" aria-controls="topics-modal">Topics</button>
+                    </div>
+                </div>
             </div>
-            <button id="topics-btn" aria-haspopup="dialog" aria-controls="topics-modal">Topics</button>
         </div>
     </div>
 
     <div id="white-box">
         <div id="main">
-            <iframe id="wiki-article" src="" frameborder="0"></iframe>
+            <div id="article-view" class="article-view">
+                <div id="article-summary" class="article-summary">
+                    <figure id="article-hero" class="article-hero" hidden>
+                        <img id="article-hero-img" alt="" />
+                        <figcaption id="article-hero-caption"></figcaption>
+                    </figure>
+                    <header class="article-header">
+                        <h2 id="article-title"></h2>
+                        <p id="article-description"></p>
+                    </header>
+                </div>
+                <article id="article-content" class="article-content" aria-live="polite"></article>
+                <iframe id="wiki-iframe" class="wiki-iframe" hidden></iframe>
+            </div>
         </div>
         <div class="scroll-arrows">
             <div class="scroll-arrow up"></div>
