@@ -13,11 +13,54 @@ I am to make it customizable and plan on moving over to React at some point.
     <link rel="icon" type="image/x-icon" href="Favicon_Logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="theme-ocean">
     <div id="header">
         <h1><a href="index.html">WikiSurfer🏄</a></h1>
         <h4>Azaria Kelman</h4>
-        <button id="topics-btn" aria-haspopup="dialog" aria-controls="topics-modal">Topics</button>
+        <div class="header-controls">
+            <div class="theme-select" id="theme-select" aria-haspopup="listbox" aria-expanded="false">
+                <button class="theme-button" id="theme-button" aria-label="Change theme" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="theme-swatch" aria-hidden="true"></span>
+                    <span class="theme-label" id="theme-label">Theme</span>
+                    <span class="chevron" aria-hidden="true">▾</span>
+                </button>
+                <ul class="theme-menu" id="theme-menu" role="listbox" tabindex="-1" aria-labelledby="theme-button" hidden>
+                    <li class="theme-option" role="option" data-value="forest" aria-selected="false">
+                        <span class="swatch" data-theme="forest"></span>
+                        <span>Forest</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="ocean" aria-selected="false">
+                        <span class="swatch" data-theme="ocean"></span>
+                        <span>Ocean</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="sunset" aria-selected="false">
+                        <span class="swatch" data-theme="sunset"></span>
+                        <span>Sunset</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="midnight" aria-selected="false">
+                        <span class="swatch" data-theme="midnight"></span>
+                        <span>Midnight</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="black" aria-selected="false">
+                        <span class="swatch" data-theme="black"></span>
+                        <span>Black</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="white" aria-selected="false">
+                        <span class="swatch" data-theme="white"></span>
+                        <span>White</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="mono" aria-selected="false">
+                        <span class="swatch" data-theme="mono"></span>
+                        <span>Black &amp; White</span>
+                    </li>
+                    <li class="theme-option" role="option" data-value="rose" aria-selected="false">
+                        <span class="swatch" data-theme="rose"></span>
+                        <span>Rose</span>
+                    </li>
+                </ul>
+            </div>
+            <button id="topics-btn" aria-haspopup="dialog" aria-controls="topics-modal">Topics</button>
+        </div>
     </div>
 
     <div id="white-box">
