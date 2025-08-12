@@ -69,15 +69,15 @@ I am to make it customizable and plan on moving over to React at some point.
                         </div>
                     </div>
                     <div class="settings-section">
-                        <div class="settings-label">Wikipedia Theme</div>
-                        <button id="mode-toggle" class="mode-toggle" aria-pressed="false" aria-label="Toggle dark mode" title="Toggle dark mode">🌓</button>
-                    </div>
-                    <div class="settings-section">
                         <div class="settings-label">Renderer</div>
                         <label class="toggle">
                             <input type="checkbox" id="renderer-iframe" />
                             <span>Use API renderer (experimental)</span>
                         </label>
+                    </div>
+                    <div class="settings-section" id="wiki-theme-section">
+                        <div class="settings-label">Wikipedia Theme</div>
+                        <button id="mode-toggle" class="mode-toggle" aria-pressed="false" aria-label="Toggle dark mode" title="Toggle dark mode">🌓</button>
                     </div>
                     <div class="settings-section">
                         <button id="topics-btn" aria-haspopup="dialog" aria-controls="topics-modal">Topics</button>

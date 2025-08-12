@@ -65,6 +65,7 @@ const themeSelect = document.getElementById('theme-select');
 const modeToggle = document.getElementById('mode-toggle');
 const iframeToggle = document.getElementById('renderer-iframe');
 const wikiIframe = document.getElementById('wiki-iframe');
+const wikiThemeSection = document.getElementById('wiki-theme-section');
 // Settings dropdown references
 const settings = document.getElementById('settings');
 const settingsButton = document.getElementById('settings-button');
@@ -487,6 +488,8 @@ function applyRendererMode(mode) {
     const useIframe = mode === 'iframe';
     if (wikiIframe) wikiIframe.hidden = !useIframe;
     if (articleViewEl) articleViewEl.hidden = useIframe;
+    // Show Wikipedia Theme only for API mode
+    if (wikiThemeSection) wikiThemeSection.hidden = useIframe;
 }
 function renderIframe(title) {
     if (!wikiIframe) return;
