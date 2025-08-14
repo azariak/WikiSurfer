@@ -97,8 +97,12 @@ const THEMES = [
   { id: 'midnight', label: 'Midnight' },
   { id: 'black', label: 'Black' },
   { id: 'white', label: 'White' },
-  { id: 'mono', label: 'Black & White' },
   { id: 'rose', label: 'Rose' },
+  { id: 'purple-pink-ombre', label: 'Purple Pink' },
+  { id: 'blue-teal-ombre', label: 'Blue Teal' },
+  { id: 'purple-green-ombre', label: 'Purple Green' },
+  { id: 'orange-red-ombre', label: 'Orange Red' },
+  { id: 'mono', label: 'Black & White' },
   { id: 'custom', label: 'Custom' },
 ];
 
