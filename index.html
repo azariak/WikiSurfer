@@ -65,6 +65,35 @@ I am to make it customizable and plan on moving over to React at some point.
                                     <span class="swatch" data-theme="rose"></span>
                                     <span>Rose</span>
                                 </li>
+                                <li class="theme-option custom-theme-option" role="option" data-value="custom" aria-selected="false">
+                                    <span class="swatch custom-swatch" data-theme="custom"></span>
+                                    <span>Custom</span>
+                                    <span class="customize-icon">🎨</span>
+                                    <span class="dropdown-arrow">◀</span>
+                                    <div class="custom-theme-dropdown" id="custom-theme-dropdown" hidden>
+                                        <div class="custom-theme-header">
+                                            <span class="custom-theme-title">Customize Colors</span>
+                                        </div>
+                                        <div class="color-picker-grid">
+                                            <div class="color-picker-item">
+                                                <label for="gradient-start-picker">Background Start</label>
+                                                <input type="color" id="gradient-start-picker" value="#1a472a">
+                                            </div>
+                                            <div class="color-picker-item">
+                                                <label for="gradient-end-picker">Background End</label>
+                                                <input type="color" id="gradient-end-picker" value="#2d5a27">
+                                            </div>
+                                            <div class="color-picker-item">
+                                                <label for="primary-color-picker">Accent Color</label>
+                                                <input type="color" id="primary-color-picker" value="#2ecc71">
+                                            </div>
+                                        </div>
+                                        <div class="custom-theme-actions">
+                                            <button id="apply-custom-theme" class="apply-custom-btn">Apply Theme</button>
+                                            <button id="reset-custom-theme" class="reset-custom-btn secondary">Reset</button>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>

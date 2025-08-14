@@ -48,6 +48,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
       Ubuntu, Cantarell, sans-serif;
     position: relative;
+    transition: background 0.6s ease;
   }
 
   /* Theme overrides */
@@ -125,6 +126,13 @@
   --surface-glass: rgba(0, 0, 0, 0.06);
   --surface-glass-2: rgba(0, 0, 0, 0.12);
   --text-on-glass: #111827;
+}
+/* Custom theme */
+.theme-custom {
+  --gradient-start: var(--custom-gradient-start, #1a472a);
+  --gradient-end: var(--custom-gradient-end, #2d5a27);
+  --primary-color: var(--custom-primary-color, #2ecc71);
+  --hover-color: var(--custom-hover-color, #27ae60);
 }
   
   #header {
@@ -206,6 +214,269 @@
 .theme-option .swatch[data-theme="white"] { background: linear-gradient(135deg, #f8fafc, #eef2f7); }
 .theme-option .swatch[data-theme="rose"] { background: linear-gradient(135deg, #f7971e, #ffd200); }
 .theme-option .swatch[data-theme="mono"] { background: linear-gradient(135deg, #000000, #ffffff); }
+.theme-option .swatch[data-theme="custom"] { background: linear-gradient(135deg, var(--custom-gradient-start, #1a472a), var(--custom-gradient-end, #2d5a27)); }
+
+/* Custom theme option styling */
+.custom-theme-option {
+  position: relative;
+}
+.customize-icon {
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+.custom-theme-option:hover .customize-icon {
+  opacity: 1;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  opacity: 0.6;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+.custom-theme-option:hover .dropdown-arrow {
+  opacity: 1;
+  color: #374151;
+}
+
+/* Custom theme nested dropdown */
+.custom-theme-dropdown {
+  position: absolute;
+  right: 100%;
+  top: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 0.75rem;
+  width: 280px;
+  z-index: 1300;
+  margin-right: 8px;
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.custom-theme-dropdown[hidden] {
+  display: none;
+}
+
+/* Mobile optimization - centered overlay */
+@media (max-width: 768px) {
+  .custom-theme-dropdown {
+    /* Position near top to avoid bottom cutoff */
+    position: fixed;
+    top: 20%;
+    left: 40%;
+    right: auto;
+    transform: translate(-50%, 0);
+    margin: 0;
+    
+    /* Full-width with padding */
+    width: calc(100vw - 2rem);
+    max-width: 320px;
+    
+    /* Enhanced mobile styling */
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    padding: 1rem;
+    
+    /* Higher z-index to appear over everything */
+    z-index: 2000;
+    
+    /* Mobile animation */
+    animation: modalSlideIn 0.3s ease-out;
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+  }
+  
+  /* Add backdrop overlay */
+  .custom-theme-dropdown::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    backdrop-filter: blur(2px);
+  }
+  
+  /* Mobile-optimized spacing */
+  .custom-theme-header {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .custom-theme-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .color-picker-grid {
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  
+  .color-picker-item label {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .color-picker-item input[type="color"] {
+    height: 44px; /* Larger touch target */
+    border-radius: 8px;
+  }
+  
+  .custom-theme-actions {
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .apply-custom-btn,
+  .reset-custom-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.custom-theme-header {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-theme-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.color-picker-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.color-picker-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.color-picker-item label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.color-picker-item input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+  transition: border-color 0.2s ease;
+}
+
+.color-picker-item input[type="color"]:hover {
+  border-color: var(--primary-color);
+}
+
+.color-picker-item input[type="color"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.color-picker-item input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.color-picker-item input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 7px;
+}
+
+.color-picker-item input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: 7px;
+}
+
+.custom-theme-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.apply-custom-btn,
+.reset-custom-btn {
+  flex: 1;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.apply-custom-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.apply-custom-btn:hover {
+  background: var(--hover-color);
+  transform: none;
+}
+
+.reset-custom-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.reset-custom-btn:hover {
+  background: #e5e7eb;
+  transform: none;
+}
 
 .header-controls {
   position: absolute;
@@ -594,7 +865,7 @@ button {
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, background-color 0.6s ease;
   font-size: clamp(0.8rem, 2vw, 1rem);
   white-space: nowrap;
   touch-action: manipulation;

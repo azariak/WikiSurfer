@@ -7,7 +7,7 @@ Note: This is a personal project being actively developed.
 
 Dev Roadmap:
 - Organize articles by topic, allowing users to select preferences or use LLM/RL algorithms.
-- Custom theme
+- Fix custom theme on mobile
 - Fix mobile design including header, iframe
 - Update image on ReadME
 - Add search for articles, AI chat

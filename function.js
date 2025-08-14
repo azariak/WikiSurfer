@@ -89,6 +89,7 @@ function toggleSettingsMenu(show) {
   }
 }
 const THEME_STORAGE_KEY = 'ws_theme_v1';
+const CUSTOM_THEME_STORAGE_KEY = 'ws_custom_theme_v1';
 const THEMES = [
   { id: 'forest', label: 'Forest' },
   { id: 'ocean', label: 'Ocean' },
@@ -98,6 +99,7 @@ const THEMES = [
   { id: 'white', label: 'White' },
   { id: 'mono', label: 'Black & White' },
   { id: 'rose', label: 'Rose' },
+  { id: 'custom', label: 'Custom' },
 ];
 
 function readTheme() {
@@ -106,12 +108,70 @@ function readTheme() {
 function writeTheme(id) {
   try { localStorage.setItem(THEME_STORAGE_KEY, id); } catch {}
 }
+function readCustomTheme() {
+  try {
+    const saved = localStorage.getItem(CUSTOM_THEME_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {
+      gradientStart: '#1a472a',
+      gradientEnd: '#2d5a27',
+      primaryColor: '#2ecc71'
+    };
+  } catch {
+    return {
+      gradientStart: '#1a472a',
+      gradientEnd: '#2d5a27',
+      primaryColor: '#2ecc71'
+    };
+  }
+}
+function writeCustomTheme(customTheme) {
+  try {
+    localStorage.setItem(CUSTOM_THEME_STORAGE_KEY, JSON.stringify(customTheme));
+  } catch {}
+}
+function generateHoverColor(color) {
+  // Convert hex to RGB
+  const hex = color.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
+  
+  // Darken by reducing each component by 20%
+  const darkenedR = Math.max(0, Math.floor(r * 0.8));
+  const darkenedG = Math.max(0, Math.floor(g * 0.8));
+  const darkenedB = Math.max(0, Math.floor(b * 0.8));
+  
+  // Convert back to hex
+  return `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`;
+}
+function applyCustomTheme(customTheme) {
+  const root = document.documentElement;
+  const hoverColor = generateHoverColor(customTheme.primaryColor);
+  
+  root.style.setProperty('--custom-gradient-start', customTheme.gradientStart);
+  root.style.setProperty('--custom-gradient-end', customTheme.gradientEnd);
+  root.style.setProperty('--custom-primary-color', customTheme.primaryColor);
+  root.style.setProperty('--custom-hover-color', hoverColor);
+  
+  // Update the custom swatch preview
+  const customSwatch = document.querySelector('.swatch[data-theme="custom"]');
+  if (customSwatch) {
+    customSwatch.style.background = `linear-gradient(135deg, ${customTheme.gradientStart}, ${customTheme.gradientEnd})`;
+  }
+}
 function applyTheme(id) {
   const body = document.body;
   // Remove any prior theme- classes
   for (const t of THEMES) body.classList.remove(`theme-${t.id}`);
   body.classList.add(`theme-${id}`);
   if (themeLabel) themeLabel.textContent = THEMES.find(t => t.id === id)?.label || 'Theme';
+  
+  // Apply custom theme if selected
+  if (id === 'custom') {
+    const customTheme = readCustomTheme();
+    applyCustomTheme(customTheme);
+  }
+  
   // Mark selected in menu if present
   if (themeMenu) {
     themeMenu.querySelectorAll('.theme-option').forEach(opt => {
@@ -128,10 +188,26 @@ function toggleThemeMenu(show) {
     themeSelect.setAttribute('aria-expanded', 'true');
     themeButton.setAttribute('aria-expanded', 'true');
     themeMenu.focus();
+    // Close custom theme dropdown when opening theme menu
+    toggleCustomThemeDropdown(false);
   } else {
     themeMenu.setAttribute('hidden', '');
     themeSelect.setAttribute('aria-expanded', 'false');
     themeButton.setAttribute('aria-expanded', 'false');
+    // Also close custom theme dropdown
+    toggleCustomThemeDropdown(false);
+  }
+}
+
+function toggleCustomThemeDropdown(show) {
+  const customThemeDropdown = document.getElementById('custom-theme-dropdown');
+  if (!customThemeDropdown) return;
+  
+  const isOpen = show ?? customThemeDropdown.hasAttribute('hidden');
+  if (isOpen) {
+    customThemeDropdown.removeAttribute('hidden');
+  } else {
+    customThemeDropdown.setAttribute('hidden', '');
   }
 }
 let currentArticleIndex = Math.floor(Math.random() * articleTitles.length); // Random start index
@@ -412,6 +488,14 @@ if (themeButton && themeMenu) {
         if (!li) return;
         const id = li.getAttribute('data-value');
         if (!id) return;
+        
+        // Handle custom theme option click
+        if (id === 'custom') {
+            e.stopPropagation();
+            toggleCustomThemeDropdown(true);
+            return;
+        }
+        
         writeTheme(id);
         applyTheme(id);
         toggleThemeMenu(false);
@@ -420,7 +504,12 @@ if (themeButton && themeMenu) {
     document.addEventListener('click', (e) => {
         if (!themeSelect) return;
         const withinSettings = settings && settings.contains(e.target);
-        if (!withinSettings) toggleThemeMenu(false);
+        const withinCustomDropdown = document.getElementById('custom-theme-dropdown')?.contains(e.target);
+        
+        if (!withinSettings && !withinCustomDropdown) {
+            toggleThemeMenu(false);
+            toggleCustomThemeDropdown(false);
+        }
     });
     // Keyboard support
     themeMenu.addEventListener('keydown', (e) => {
@@ -428,8 +517,106 @@ if (themeButton && themeMenu) {
     });
 }
 
+// Initialize custom theme on startup
+function initializeCustomTheme() {
+  const customTheme = readCustomTheme();
+  applyCustomTheme(customTheme);
+  
+  // Set color picker values
+  const gradientStartPicker = document.getElementById('gradient-start-picker');
+  const gradientEndPicker = document.getElementById('gradient-end-picker');
+  const primaryColorPicker = document.getElementById('primary-color-picker');
+  
+  if (gradientStartPicker) gradientStartPicker.value = customTheme.gradientStart;
+  if (gradientEndPicker) gradientEndPicker.value = customTheme.gradientEnd;
+  if (primaryColorPicker) primaryColorPicker.value = customTheme.primaryColor;
+}
+
+// Custom theme event listeners
+function setupCustomThemeListeners() {
+  const applyCustomThemeBtn = document.getElementById('apply-custom-theme');
+  const resetCustomThemeBtn = document.getElementById('reset-custom-theme');
+  const gradientStartPicker = document.getElementById('gradient-start-picker');
+  const gradientEndPicker = document.getElementById('gradient-end-picker');
+  const primaryColorPicker = document.getElementById('primary-color-picker');
+  
+  if (applyCustomThemeBtn) {
+    applyCustomThemeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const customTheme = {
+        gradientStart: gradientStartPicker?.value || '#1a472a',
+        gradientEnd: gradientEndPicker?.value || '#2d5a27',
+        primaryColor: primaryColorPicker?.value || '#2ecc71'
+      };
+      
+      writeCustomTheme(customTheme);
+      applyCustomTheme(customTheme);
+      writeTheme('custom');
+      applyTheme('custom');
+      
+      // Close dropdowns after applying
+      toggleCustomThemeDropdown(false);
+      toggleThemeMenu(false);
+    });
+  }
+  
+  if (resetCustomThemeBtn) {
+    resetCustomThemeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const defaultTheme = {
+        gradientStart: '#1a472a',
+        gradientEnd: '#2d5a27',
+        primaryColor: '#2ecc71'
+      };
+      
+      if (gradientStartPicker) gradientStartPicker.value = defaultTheme.gradientStart;
+      if (gradientEndPicker) gradientEndPicker.value = defaultTheme.gradientEnd;
+      if (primaryColorPicker) primaryColorPicker.value = defaultTheme.primaryColor;
+      
+      writeCustomTheme(defaultTheme);
+      applyCustomTheme(defaultTheme);
+    });
+  }
+  
+  // Real-time preview on color change
+  const colorPickers = [gradientStartPicker, gradientEndPicker, primaryColorPicker];
+  colorPickers.forEach(picker => {
+    if (picker) {
+      picker.addEventListener('input', (e) => {
+        e.stopPropagation();
+        const currentTheme = readTheme();
+        if (currentTheme === 'custom') {
+          const customTheme = {
+            gradientStart: gradientStartPicker?.value || '#1a472a',
+            gradientEnd: gradientEndPicker?.value || '#2d5a27',
+            primaryColor: primaryColorPicker?.value || '#2ecc71'
+          };
+          // Auto-save and apply changes in real-time
+          writeCustomTheme(customTheme);
+          applyCustomTheme(customTheme);
+        }
+      });
+      
+      // Also stop propagation on click to prevent dropdown from closing
+      picker.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+  });
+  
+  // Stop propagation for the entire custom dropdown to prevent it from closing
+  const customThemeDropdown = document.getElementById('custom-theme-dropdown');
+  if (customThemeDropdown) {
+    customThemeDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+}
+
 // Apply persisted theme at startup
+initializeCustomTheme();
 applyTheme(readTheme());
+setupCustomThemeListeners();
 
 // Settings dropdown wiring
 if (settingsButton && settingsMenu) {
